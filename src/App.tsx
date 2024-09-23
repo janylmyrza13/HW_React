@@ -16,6 +16,9 @@ function App() {
     inputRef.current.value = ""; 
   }
 };
+const clearTodos = () => {
+  setTodos([]);
+};
  useEffect(() => {
   localStorage.setItem('todos',JSON.stringify(todos));
  },[todos]);
@@ -30,7 +33,9 @@ function App() {
           <Item key={index} el={el} index={''}/>
         ))}
         {todos.length >= 4 && <div>Всего задач: {todos.length}</div>}
+        <button onClick={clearTodos}>Очистить все</button>
      </div>
+      
          );
      }
      export default App
