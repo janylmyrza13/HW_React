@@ -36,7 +36,7 @@ function App() {
         <button type='submit'> Добавить</button>
       </form>
       
-        {todos.map((el: string,index: number) => void (
+        {todos.map((el: string,index: number) => (
           <Item key={index} el={el} index = {index} onDelete ={deleteTodo}/>
         ))}
         {todos.length >= 4 && <div>Всего задач: {todos.length}</div>}
