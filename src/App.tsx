@@ -16,9 +16,16 @@ function App() {
     inputRef.current.value = ""; 
   }
 };
-const clearTodos = () => {
-  setTodos([]);
-};
+  const deleteTodo = (index: number) => {
+    const updatedTodos = [...todos];
+    updatedTodos.splice(index, 1);
+    setTodos(updatedTodos);
+  };
+
+  const clearTodos = () => {
+    setTodos([]);
+  };
+
  useEffect(() => {
   localStorage.setItem('todos',JSON.stringify(todos));
  },[todos]);
@@ -29,12 +36,13 @@ const clearTodos = () => {
         <button type='submit'> Добавить</button>
       </form>
       
-        {todos.map((el: string,index: React.Key | null | undefined) => (
-          <Item key={index} el={el} index={''}/>
+        {todos.map((el: string,index: number) => void (
+          <Item key={index} el={el} index = {index} onDelete ={deleteTodo}/>
         ))}
         {todos.length >= 4 && <div>Всего задач: {todos.length}</div>}
-        <button onClick={clearTodos}>Очистить все</button>
+        <button onClick={clearTodos}> Очистить всего</button>
      </div>
+
       
          );
      }
