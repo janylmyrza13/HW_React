@@ -2,26 +2,38 @@ import './Index.css'
 import React, {useState, useRef, useEffect}from 'react';
 import Item from './Item';
 
-function App() {
- const initalizTodos = ["Work", "Study","Sleep"];
- const storedTodos = JSON.parse(localStorage.getItem("todos")??
+interface Todo{
+  id: number;
+  el: string;
+}
+
+function App(){
+//  const initalizTodos = ["Work", "Study","Sleep"];
+ const initalizTodos: Todo [] = [
+  {id: 1, el: "Work"},
+  {id: 2, el: "Study"},
+  {id: 3, el: "Sleep"},
+ ];
+  
+ const storedTodos: Todo[] = JSON.parse(localStorage.getItem("todos")??
  JSON.stringify(initalizTodos));
- const [todos, setTodos] = useState(storedTodos);
+//  const [todos, setTodos] = useState(storedTodos);
+ const[todos, setTodos] = useState<Todo[]>(storedTodos);
  const inputRef = useRef<HTMLInputElement>(null);
 
  const addTodoHandler = (e: React.FormEvent) => {
   e.preventDefault(); 
   if (inputRef.current?.value.trim()) {
-    setTodos([...todos, inputRef.current.value]);
-    inputRef.current.value = ""; 
+    const newTodo: Todo = {
+      id: Date.now(),
+      el: inputRef.current.value
+    };
+   setTodos((prevTodos) => [...prevTodos, newTodo]);
+   inputRef.current.value = "";
   }
 };
-  const deleteTodo = (index: number) => {
-    const updatedTodos = [...todos];
-    updatedTodos.splice(index, 1);
-    setTodos(updatedTodos);
-  };
-
+  const deleteTodo = (id: number) => {setTodos((prevTodos) => prevTodos.filter(todo => todo.id !==id));
+};
   const clearTodos = () => {
     setTodos([]);
   };
@@ -29,6 +41,7 @@ function App() {
  useEffect(() => {
   localStorage.setItem('todos',JSON.stringify(todos));
  },[todos]);
+
   return (
      <div>
       <form onSubmit={addTodoHandler}>
@@ -36,14 +49,12 @@ function App() {
         <button type='submit'> Добавить</button>
       </form>
       
-        {todos.map((el: string,index: number) => (
-          <Item key={index} el={el} index = {index} onDelete ={deleteTodo}/>
+      {todos.map((todo: Todo) => (
+           <Item key={todo.id} todo={todo} onDelete={deleteTodo} />
         ))}
-        {todos.length >= 4 && <div>Всего задач: {todos.length}</div>}
+        {todos.length >= 4 && <div>Всего задач: {todos.length}</div> }
         <button onClick={clearTodos}> Очистить всего</button>
      </div>
-
-      
-         );
+        );
      }
-     export default App
+     export default App;

@@ -1,17 +1,20 @@
 import React from 'react';
-
+interface Todo {
+    id: number;
+    el: string;
+}
 
 type ItemProps = {
-    el:string;
-    index: number;
-
-onDelete:(index: number) => void;
+    todo: Todo;
+onDelete:(id: number) => void;
 };
 
 
-const Item: React.FC<ItemProps> = ({el,index, onDelete}) => {
-    return ( <div>{el}
-    <button onClick={() => onDelete(index)}> Удалить</button>
+const Item: React.FC<ItemProps> = ({todo, onDelete,}) => 
+    {
+    return ( <div>
+    <button>{todo.el}</button>
+    <button onClick={() => onDelete(todo.id)}> Удалить</button>
     </div>);
 };
 export default Item;
